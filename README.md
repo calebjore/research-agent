@@ -1,5 +1,6 @@
 ## Structure
 
+```
 research-agent/
 ├── agent.py          # entry point, argparse, asyncio.run()
 ├── llm_client.py     # wraps the Anthropic API call
@@ -7,6 +8,7 @@ research-agent/
 ├── graph.py          # LangGraph setup
 ├── prompts.py        # system prompt
 └── README.md         # written at the end
+```
 
 ## Example query
 ![Agent demo](demo.png)
