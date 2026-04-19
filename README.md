@@ -1,4 +1,4 @@
-## Structure:
+## Structure
 
 research-agent/
 ├── agent.py          # entry point, argparse, asyncio.run()
