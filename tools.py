@@ -92,7 +92,7 @@ async def fetch_url(url: str) -> str:
             return f"Error fetching {url}: {e}"
 
     parser = TextExtractor()
-    parser.feed(response.text)
+    parser.feed(response["text"])
     text = " ".join(parser.text_parts)
     return text[:3000]
 

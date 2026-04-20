@@ -2,14 +2,14 @@ from graph import compiled_graph
 import asyncio
 import argparse
 
-async def main(query: str):
+async def main(query: str, backend: str, model: str):
     initial_state = {
         "messages": [{"role": "user", "content": query}],
         "tool_results": [],
         "final_answer": None
     }
 
-    result = await compiled_graph.ainvoke(initial_state, config={"recursion_limit": 20})
+    result = await compiled_graph.ainvoke(initial_state, config={"recursion_limit": 20, "configurable": {"backend": backend, "model": model}})
 
     if result["tool_results"]:
         print("Tools used:")
@@ -28,5 +28,7 @@ async def main(query: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Research agent")
     parser.add_argument("--query", type=str, required=True, help="Research question")
+    parser.add_argument("--backend", type=str)
+    parser.add_argument("--model", type=str)
     args = parser.parse_args()
-    asyncio.run(main(args.query))
+    asyncio.run(main(args.query, args.backend, args.model))

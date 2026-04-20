@@ -4,6 +4,7 @@ from typing import TypedDict, Annotated
 import asyncio
 import operator
 from langgraph.graph import END, StateGraph
+from langchain_core.runnables import RunnableConfig
 from prompts import SYSTEM_PROMPT
 from tools import dispatch_tool, TOOL_DEFINITIONS
 
@@ -15,14 +16,17 @@ class AgentState(TypedDict):
     tool_results: Annotated[list, operator.add]
     final_answer: str | None
 
-async def agent_node(state: AgentState) -> dict:
+async def agent_node(state: AgentState, config: RunnableConfig) -> dict:
+    backend = config["configurable"].get("backend", "anthropic")
+    model = config["configurable"].get("model", None)
+
     response = await chat(
-        messages=state["messages"], system=SYSTEM_PROMPT, tools=tools
+        messages=state["messages"], system=SYSTEM_PROMPT, tools=tools, backend=backend, model=model
     )
 
     new_message = {
         "role": "assistant",
-        "content": [block.model_dump() for block in response.content]
+        "content": response["content"]
     }
 
     return {"messages": [new_message]}
